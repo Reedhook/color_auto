@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->decimal('credit', 9)->default(0);
+            $table->boolean('is_color_free')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

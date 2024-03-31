@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BuyRequest;
+use App\Http\Requests\ColorUpdateRequest;
+use App\Models\Color;
 use App\Models\Taxi;
+use App\Services\ColorTaxiService;
 use App\Services\TaxiService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,5 +43,23 @@ class Controller extends BaseController
         }
 
         return redirect()->route('app')->with('success', 'Вы приобрели машину');
+    }
+
+
+    /**
+     * Метод для изменения цвета
+     * @param ColorUpdateRequest $request
+     * @param Taxi $taxi
+     * @return RedirectResponse
+     */
+    public function colorUpdate(ColorUpdateRequest $request, Taxi $taxi): RedirectResponse
+    {
+        $color = Color::find($request->color_id);
+        $proccess = ColorTaxiService::validateAndColorUpdate(Auth::user(), $taxi, $color);
+
+        if ($proccess !== true) {
+            return redirect()->route('taxi.list')->with('error', $proccess);
+        }
+        return redirect()->route('taxi.list')->with('success', 'Вы поменяли цвет');
     }
 }

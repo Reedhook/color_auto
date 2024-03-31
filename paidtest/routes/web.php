@@ -21,6 +21,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/list', [Controller::class, 'list'])->name('taxi.list');
     Route::post('/buy/{taxi}', [Controller::class, 'buy'])->name('taxi.buy');
+    Route::post('/colorUpdate/{taxi}', [Controller::class, 'colorUpdate'])->name('taxi.colorUpdate');
+
 });
 
 Auth::routes();
